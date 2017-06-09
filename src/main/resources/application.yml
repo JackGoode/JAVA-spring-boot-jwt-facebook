@@ -1,0 +1,24 @@
+server.port: 9966
+spring.jpa:
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
+  generate-ddl: true
+spring.h2.console.enabled: true
+spring:
+  jpa:
+    show-sql: true
+
+logging:
+  level: debug
+
+#secret
+com.eagulyi:
+  facebook-api-url: graph.facebook.com
+  facebook-api-version: v2.9
+  appId:
+  appSecret:
+  security.jwt.tokenSigningKey:
+  security.jwt:
+    tokenExpirationTime: 30 # Number of days
+    refreshTokenExpTime: 60 # Days
+    tokenIssuer: http://eagulyi.com
+    corsAllowedOrigin: http://localhost:4200

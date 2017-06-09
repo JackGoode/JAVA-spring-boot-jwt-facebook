@@ -1,0 +1,90 @@
+{
+  "id": "347759925585713",
+  "name": "Eugene Gulyi",
+  "email": "eagulyi@gmail.com",
+  "location": {
+    "id": "111227078906045",
+    "name": "Kyiv, Ukraine"
+  },
+  "educationList": [
+    {
+      "school": {
+        "id": "237457579708420",
+        "name": "Николаевская гимназия №2"
+      },
+      "type": "High School",
+      "year": {
+        "id": "137616982934053",
+        "name": "2006"
+      },
+      "id": "329204244107948",
+      "concentration": []
+    },
+    {
+      "school": {
+        "id": "129486917076199",
+        "name": "НАУ (авиационный) (бывш. КИИГА, КМУГА)"
+      },
+      "type": "College",
+      "year": {
+        "id": "144044875610606",
+        "name": "2011"
+      },
+      "id": "375543996140639",
+      "concentration": [
+        {
+          "id": "185630554810528",
+          "name": "Computer Systems and Networks"
+        }
+      ]
+    }
+  ],
+  "workList": [
+    {
+      "employer": {
+        "id": "944536842343841",
+        "name": "Little Pilots"
+      },
+      "position": {
+        "id": "140020092705212",
+        "name": "Co-Founder, Software Engineer"
+      },
+      "start_date": "2016-12-31",
+      "id": "417444268617278"
+    },
+    {
+      "employer": {
+        "id": "116767258407128",
+        "name": "Infopulse Ukraine"
+      },
+      "position": {
+        "id": "1037286242985661",
+        "name": "Software Engineer / TL / Tambourine monkey"
+      },
+      "start_date": "2010-12-31",
+      "id": "124179057943802",
+      "end_date": "2016-12-31",
+      "location": {
+        "id": "111227078906045",
+        "name": "Kyiv, Ukraine"
+      }
+    },
+    {
+      "employer": {
+        "id": "116767258407128",
+        "name": "Infopulse Ukraine"
+      },
+      "position": {
+        "id": "705744319543619",
+        "name": "Operations Engineer"
+      },
+      "start_date": "2008-01-01",
+      "id": "329207440774295",
+      "end_date": "2010-12-31",
+      "location": {
+        "id": "111227078906045",
+        "name": "Kyiv, Ukraine"
+      }
+    }
+  ]
+}

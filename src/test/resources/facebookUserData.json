@@ -1,0 +1,93 @@
+{
+  "first_name": "Eugene",
+  "last_name": "Gulyi",
+  "email": "eagulyi\u0040gmail.com",
+  "education": [
+    {
+      "school": {
+        "id": "237457579708420",
+        "name": "\u041d\u0438\u043a\u043e\u043b\u0430\u0435\u0432\u0441\u043a\u0430\u044f \u0433\u0438\u043c\u043d\u0430\u0437\u0438\u044f \u21162"
+      },
+      "type": "High School",
+      "year": {
+        "id": "137616982934053",
+        "name": "2006"
+      },
+      "id": "329204244107948"
+    },
+    {
+      "concentration": [
+        {
+          "id": "185630554810528",
+          "name": "Computer Systems and Networks"
+        }
+      ],
+      "school": {
+        "id": "129486917076199",
+        "name": "\u041d\u0410\u0423 (\u0430\u0432\u0438\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0439) (\u0431\u044b\u0432\u0448. \u041a\u0418\u0418\u0413\u0410, \u041a\u041c\u0423\u0413\u0410)"
+      },
+      "type": "College",
+      "year": {
+        "id": "144044875610606",
+        "name": "2011"
+      },
+      "id": "375543996140639"
+    }
+  ],
+  "work": [
+    {
+      "employer": {
+        "id": "944536842343841",
+        "name": "Little Pilots"
+      },
+      "position": {
+        "id": "140020092705212",
+        "name": "Co-Founder, Software Engineer"
+      },
+      "start_date": "2016-12-31",
+      "id": "417444268617278"
+    },
+    {
+      "end_date": "2016-12-31",
+      "employer": {
+        "id": "116767258407128",
+        "name": "Infopulse Ukraine"
+      },
+      "location": {
+        "id": "111227078906045",
+        "name": "Kyiv, Ukraine"
+      },
+      "position": {
+        "id": "1037286242985661",
+        "name": "Software Engineer \/ TL \/ Tambourine monkey"
+      },
+      "start_date": "2010-12-31",
+      "id": "124179057943802"
+    },
+    {
+      "end_date": "2010-12-31",
+      "employer": {
+        "id": "116767258407128",
+        "name": "Infopulse Ukraine"
+      },
+      "location": {
+        "id": "111227078906045",
+        "name": "Kyiv, Ukraine"
+      },
+      "position": {
+        "id": "705744319543619",
+        "name": "Operations Engineer"
+      },
+      "start_date": "2008-01-01",
+      "id": "329207440774295"
+    }
+  ],
+  "location": {
+    "location": {
+      "city": "Kyiv",
+      "country": "Ukraine"
+    },
+    "id": "111227078906045"
+  },
+  "id": "347759925585713"
+}

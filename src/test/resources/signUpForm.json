@@ -1,0 +1,46 @@
+{
+  "first_name": "Eugene",
+  "last_name": "Gulyi",
+  "email": "eagulyi@gmail.com",
+  "city": "Kyiv",
+  "country": "Ukraine",
+  "passion": null,
+  "educationList": [
+    {
+      "institution": "Николаевская гимназия №2",
+      "speciality": "N/A",
+      "year": "2006"
+    },
+    {
+      "institution": "НАУ (авиационный) (бывш. КИИГА, КМУГА)",
+      "speciality": "Computer Systems and Networks",
+      "year": "2011"
+    }
+  ],
+  "workList": [
+    {
+      "company": "Little Pilots",
+      "position": "Co-Founder, Software Engineer",
+      "startDate": "2016",
+      "endDate": ""
+    },
+    {
+      "company": "Infopulse Ukraine",
+      "position": "Software Engineer / TL / Tambourine monkey",
+      "startDate": "2010",
+      "endDate": "2016"
+    },
+    {
+      "company": "Infopulse Ukraine",
+      "position": "Operations Engineer",
+      "startDate": "2008",
+      "endDate": "2010"
+    }
+  ],
+  "helpProposition": null,
+  "addedProposition": null,
+  "interests": null,
+  "facebookP": "347759925585713",
+  "linkedinP": "123",
+  "contact": "321"
+}
