@@ -1,6 +1,5 @@
 package com.eagulyi.security.endpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.facebook.model.token.ConvertTokenException;
 import com.eagulyi.facebook.model.token.InvalidTokenException;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
@@ -12,6 +11,7 @@ import com.eagulyi.user.model.json.facebook.FacebookUserData;
 import com.eagulyi.user.service.FacebookService;
 import com.eagulyi.user.service.UserServiceImpl;
 import com.eagulyi.user.service.util.converter.FacebookUserConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -59,7 +59,7 @@ public class FacebookLoginEndpoint {
         this.userConverter = userConverter;
     }
 
-    @RequestMapping(value = "/facebookLogin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/api/auth/facebookLogin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Transactional
     public @ResponseBody
     void facebookLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, AuthenticationException, ConvertTokenException, InvalidTokenException {

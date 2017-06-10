@@ -1,6 +1,5 @@
 package com.eagulyi.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.security.RestAuthenticationEntryPoint;
 import com.eagulyi.security.auth.ajax.AjaxAuthenticationProvider;
 import com.eagulyi.security.auth.ajax.AjaxLoginProcessingFilter;
@@ -9,6 +8,7 @@ import com.eagulyi.security.auth.jwt.JwtAuthenticationProvider;
 import com.eagulyi.security.auth.jwt.JwtTokenAuthenticationProcessingFilter;
 import com.eagulyi.security.auth.jwt.SkipPathRequestMatcher;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String FB_TOKEN_HEADER_PARAM = "FB-Access-Token";
 
     private static final String FORM_BASED_LOGIN_ENTRY_POINT = "/api/auth/login";
+    private static final String FACEBOOK_LOGIN_ENTRY_POINT = "/api/auth/facebookLogin";
     private static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     private static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/token";
     private static final String SIGNUP_ENTRY_POINT = "/api/signup";
@@ -67,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private JwtTokenAuthenticationProcessingFilter buildJwtTokenAuthenticationProcessingFilter() throws Exception {
-        List<String> pathsToSkip = Arrays.asList(TOKEN_REFRESH_ENTRY_POINT, FORM_BASED_LOGIN_ENTRY_POINT, SIGNUP_ENTRY_POINT);
+        List<String> pathsToSkip = Arrays.asList(TOKEN_REFRESH_ENTRY_POINT, FORM_BASED_LOGIN_ENTRY_POINT, SIGNUP_ENTRY_POINT, FACEBOOK_LOGIN_ENTRY_POINT);
         SkipPathRequestMatcher matcher = new SkipPathRequestMatcher(pathsToSkip, TOKEN_BASED_AUTH_ENTRY_POINT);
         JwtTokenAuthenticationProcessingFilter filter
                 = new JwtTokenAuthenticationProcessingFilter(failureHandler, tokenExtractor, matcher);
@@ -100,13 +101,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll() // Login end-point
-                .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll() // Token refresh end-point
-                .antMatchers(SIGNUP_ENTRY_POINT).permitAll() // Sign up end-point
-                .antMatchers("/console").permitAll() // H2 Console Dash-board - only for testing
+                .antMatchers(FORM_BASED_LOGIN_ENTRY_POINT).permitAll()
+                .antMatchers(FACEBOOK_LOGIN_ENTRY_POINT).permitAll()
+                .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll()
+                .antMatchers(SIGNUP_ENTRY_POINT).permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated() // Protected API End-points
+                .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated()
 
                 .and()
                 .addFilterBefore(corsRequestFilter, UsernamePasswordAuthenticationFilter.class)
