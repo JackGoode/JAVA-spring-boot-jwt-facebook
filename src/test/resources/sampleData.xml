@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <country id="60" name="Ukraine"/>
+    <city id="50" name="Kyiv"/>
+    <location id="70" city_id="50" country_id="60"/>
+    <app_user id="10" creation_date="2017-06-16 11:52:29.189" provider="INTERNAL" first_name="Firstname"
+              last_name="Lastname" username="test@gmail.com" location_id="70"/>
+    <school id="20" name="School #2"/>
+    <school id="21" name="University of Sciencez"/>
+    <education id="30" graduation_year="2006-01-01 00:00:00.0" school_id="20"/>
+    <education id="31" graduation_year="2011-01-01 00:00:00.0" school_id="21"/>
+    <app_user_education_items user_id="10" education_items_id="30"/>
+    <app_user_education_items user_id="10" education_items_id="31"/>
+    <employer id="80" name="Infopulse Ukraine"/>
+    <employer id="81" name="Infopulse Ukraine"/>
+    <employer id="82" name="Little Pilots"/>
+    <position id="90" name="Operations Engineer"/>
+    <position id="91" name="Software Engineer"/>
+    <position id="92" name="Co-Founder, Software Engineer"/>
+    <work id="100" end_date="2010-01-01 00:00:00.0" start_date="2008-01-01 00:00:00.0" employer_id="80"
+          position_id="90"/>
+    <work id="101" end_date="2016-01-01 00:00:00.0" start_date="2010-01-01 00:00:00.0" employer_id="81"
+          position_id="91"/>
+    <work id="102" start_date="2016-01-01 00:00:00.0" employer_id="82" position_id="92"/>
+    <app_user_work_items user_id="10" work_items_id="100"/>
+    <app_user_work_items user_id="10" work_items_id="101"/>
+    <app_user_work_items user_id="10" work_items_id="102"/>
+    <speciality id="40" name="N/A"/>
+    <speciality id="41" name="Computer Systems and Networks"/>
+    <education_specialities education_id="30" specialities_id="40"/>
+    <education_specialities education_id="31" specialities_id="41"/>
+    <user_roles role="MEMBER" username="test@gmail.com"/>
+    <user_token fb_id="123321" token="123token321" username="test@gmail.com"/>
+</dataset>

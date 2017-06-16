@@ -1,3 +1,4 @@
+# application-$profile$.yml
 server.port: 9966
 spring.jpa:
   database-platform: org.hibernate.dialect.PostgreSQLDialect

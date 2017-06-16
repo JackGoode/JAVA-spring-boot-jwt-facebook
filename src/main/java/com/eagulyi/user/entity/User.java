@@ -16,7 +16,7 @@ import static javax.persistence.CascadeType.ALL;
  * Created by eugene on 5/25/17.
  */
 @Entity
-@Table(name = "USERS")
+@Table(name = "APP_USER")
 public class User implements Serializable {
     @Id
     @Column(name = "ID")
