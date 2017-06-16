@@ -1,8 +1,6 @@
 package com.eagulyi.security.endpoint;
 
-import com.eagulyi.user.entity.User;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
-import com.eagulyi.security.auth.jwt.verifier.TokenVerifier;
 import com.eagulyi.security.config.JwtSettings;
 import com.eagulyi.security.config.WebSecurityConfig;
 import com.eagulyi.security.exceptions.InvalidJwtToken;
@@ -11,6 +9,7 @@ import com.eagulyi.security.model.token.JwtToken;
 import com.eagulyi.security.model.token.JwtTokenFactory;
 import com.eagulyi.security.model.token.RawAccessJwtToken;
 import com.eagulyi.security.model.token.RefreshToken;
+import com.eagulyi.user.entity.User;
 import com.eagulyi.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,15 +35,14 @@ public class RefreshTokenEndpoint {
     private final JwtTokenFactory tokenFactory;
     private final JwtSettings jwtSettings;
     private final UserServiceImpl userService;
-    private final TokenVerifier tokenVerifier;
     private final TokenExtractor tokenExtractor;
 
     @Autowired
-    public RefreshTokenEndpoint(JwtTokenFactory tokenFactory, JwtSettings jwtSettings, UserServiceImpl userService, TokenVerifier tokenVerifier, @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor) {
+    public RefreshTokenEndpoint(JwtTokenFactory tokenFactory, JwtSettings jwtSettings, UserServiceImpl userService,
+                                @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor) {
         this.tokenFactory = tokenFactory;
         this.jwtSettings = jwtSettings;
         this.userService = userService;
-        this.tokenVerifier = tokenVerifier;
         this.tokenExtractor = tokenExtractor;
     }
 
@@ -55,11 +53,6 @@ public class RefreshTokenEndpoint {
 
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
         RefreshToken refreshToken = RefreshToken.create(rawToken, jwtSettings.getTokenSigningKey()).orElseThrow(InvalidJwtToken::new);
-
-        String jti = refreshToken.getJti();
-        if (!tokenVerifier.verify(jti)) {
-            throw new InvalidJwtToken();
-        }
 
         String subject = refreshToken.getSubject();
         User user = userService.getByUsername(subject).orElseThrow(() -> new UsernameNotFoundException("User not found: " + subject));

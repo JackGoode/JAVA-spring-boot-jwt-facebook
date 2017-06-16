@@ -1,11 +1,11 @@
 package com.eagulyi.user.service.util.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.user.entity.Education;
 import com.eagulyi.user.entity.Speciality;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.entity.Work;
 import com.eagulyi.user.model.json.facebook.FacebookUserData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,24 +23,19 @@ import java.io.IOException;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FacebookUserConverterTest {
-
-    private static FacebookUserData userData;
-
     @Autowired
     private FacebookUserConverter facebookUserConverter;
 
-    private User user;
+    private static User user;
 
     @Before
     public void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        userData = mapper.readValue(new File("src/test/resources/facebookUserData.json"), FacebookUserData.class);
-        user = facebookUserConverter.convert(userData);
+        user = facebookUserConverter.convert(mapper.readValue(new File("src/test/resources/facebookUserData.json"), FacebookUserData.class));
     }
 
     @Test
     public void test_generalInformationConverted() {
-
         Assert.isTrue(user.getFirstName().equals("Eugene"));
         Assert.isTrue(user.getLastName().equals("Gulyi"));
         Assert.isTrue(user.getUsername().equals("eagulyi@gmail.com"));
