@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class FacebookUserConverter {
         user.setLastName(facebookUser.getLastName());
         user.setCreationDate(LocalDateTime.now());
         user.setFacebookId(facebookUser.getId());
-//        user.setLocation(getLocationFromString(facebookUser.getLocation().getName()));
+        user.setLocation(getLocationFromMap((Map) facebookUser.getLocation().getAdditionalProperties().get("location")));
         facebookUser.getWork().forEach(e -> {
             Work work = new Work(e.getEmployer().getName(),
                     e.getPosition().getName(),
@@ -60,12 +61,25 @@ public class FacebookUserConverter {
         return user;
     }
 
+    private Location getLocationFromMap(Map locationMap) {
+        String city = (String) locationMap.get("city");
+        String country = (String) locationMap.get("country");
+
+        return locationRepository.findByCity_NameAndCountry_Name(city, country).orElseGet(() -> new Location(city, country));
+    }
+
     private Location getLocationFromString(String locationString) {
         String[] location = locationString.split(", ");
+        String city = location[0];
+        String country = location[1];
 
-        if (location.length > 1) {
-            return locationRepository.findByCity_NameAndCountry_Name(location[0], location[1]).orElseGet(() -> new Location(location[0], location[1]));
+        switch (location.length) {
+            case 2:
+                return locationRepository.findByCity_NameAndCountry_Name(city, country).orElseGet(() -> new Location(city, country));
+            default:
+                return null;
         }
-        return new Location();
     }
+
+
 }

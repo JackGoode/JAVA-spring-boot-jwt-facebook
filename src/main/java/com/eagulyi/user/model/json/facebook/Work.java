@@ -26,9 +26,9 @@ public class Work {
     private String id;
     @JsonProperty("position")
     private Position position;
-    @JsonProperty("startDate")
+    @JsonProperty("start_date")
     private String startDate;
-    @JsonProperty("endDate")
+    @JsonProperty("end_date")
     private String endDate;
     @JsonProperty("location")
     private Location location;
