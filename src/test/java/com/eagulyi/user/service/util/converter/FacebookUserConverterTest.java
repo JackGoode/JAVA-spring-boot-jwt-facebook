@@ -43,7 +43,6 @@ public class FacebookUserConverterTest {
         Assert.isTrue(user.getLocation().getCity().getName().equals("Kyiv"));
         Assert.isTrue(user.getEducationItems().size() == 2);
         Assert.isTrue(user.getWorkItems().size() == 3);
-        Assert.isTrue(user.getFacebookId().equals("347759925585713"));
     }
 
     @Test

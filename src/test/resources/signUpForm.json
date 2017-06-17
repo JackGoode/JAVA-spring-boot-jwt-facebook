@@ -4,7 +4,6 @@
   "email": "eagulyi@gmail.com",
   "city": "Kyiv",
   "country": "Ukraine",
-  "passion": null,
   "educationList": [
     {
       "institution": "Николаевская гимназия №2",
@@ -36,11 +35,5 @@
       "startDate": "2008",
       "endDate": "2010"
     }
-  ],
-  "helpProposition": null,
-  "addedProposition": null,
-  "interests": null,
-  "facebookP": "347759925585713",
-  "linkedinP": "123",
-  "contact": "321"
+  ]
 }

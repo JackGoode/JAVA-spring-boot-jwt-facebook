@@ -1,7 +1,5 @@
 package com.eagulyi.user.endpoint;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.user.entity.User;
@@ -10,6 +8,8 @@ import com.eagulyi.user.model.json.signup.SignUpForm;
 import com.eagulyi.user.service.FacebookService;
 import com.eagulyi.user.service.UserService;
 import com.eagulyi.user.service.util.converter.SignUpFormUserConverter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,7 +51,7 @@ public class ProfileEndpoint {
     void getUserProfile(JwtAuthenticationToken token, HttpServletResponse response) throws IOException {
         UserContext userContext = (UserContext) token.getPrincipal();
         System.out.println("Requesting user " + userContext.getUsername() + " timestamp: " + LocalDateTime.now());
-        User user = userService.getByUsername(userContext.getUsername()).get(); // TODO handle optional - sometimes creating of default user takes a bit longer and profile is not loaded because of that
+        User user = userService.getByUsername(userContext.getUsername()).get();
 
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("username", user.getUsername());
@@ -64,9 +64,7 @@ public class ProfileEndpoint {
     public void saveProfile(JwtAuthenticationToken token, HttpServletRequest request) throws IOException {
         String userString = request.getReader().lines().collect(Collectors.joining());
         SignUpForm signUpUserData = objectMapper.readValue(userString, SignUpForm.class);
-        User user = userService.getByUsername(signUpUserData.getEmail()).get();
-        user = signUpFormUserConverter.convert(signUpUserData, user);
-        userService.save(user);
+        userService.save(signUpFormUserConverter.convert(signUpUserData));
     }
 
     @RequestMapping(value = "/api/me/fbData", method = RequestMethod.GET)

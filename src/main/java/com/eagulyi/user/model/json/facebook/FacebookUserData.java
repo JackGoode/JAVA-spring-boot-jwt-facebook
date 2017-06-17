@@ -1,6 +1,7 @@
 
 package com.eagulyi.user.model.json.facebook;
 
+import com.eagulyi.user.model.json.signup.JsonUserObject;
 import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -21,7 +22,7 @@ import java.util.Map;
         "id",
         "email"
 })
-public class FacebookUserData {
+public class FacebookUserData extends JsonUserObject {
 
     @JsonProperty("education")
     private List<Education> education = new ArrayList<Education>();

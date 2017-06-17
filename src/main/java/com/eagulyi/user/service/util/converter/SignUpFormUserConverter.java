@@ -3,6 +3,7 @@ package com.eagulyi.user.service.util.converter;
 import com.eagulyi.user.entity.*;
 import com.eagulyi.user.model.json.signup.SignUpForm;
 import com.eagulyi.user.repository.LocationRepository;
+import com.eagulyi.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +14,20 @@ import java.time.LocalDateTime;
  * Created by eugene on 5/26/17.
  */
 @Service
-public class SignUpFormUserConverter {
+public class SignUpFormUserConverter implements UserConverter<SignUpForm> {
 
     private final LocationRepository locationRepository;
+    private final UserService userService;
 
     @Autowired
-    public SignUpFormUserConverter(LocationRepository locationRepository) {
+    public SignUpFormUserConverter(LocationRepository locationRepository, UserService userService) {
         this.locationRepository = locationRepository;
+        this.userService = userService;
     }
 
-    public User convert(SignUpForm signUpUserData, User user) {
+    public User convert(SignUpForm signUpUserData) {
+        User user = getByUsername(signUpUserData);
+
         user.setDataProvider(DataProvider.INTERNAL);
         user.setUsername(signUpUserData.getEmail());
         user.setFirstName(signUpUserData.getFirstName());
@@ -31,8 +36,6 @@ public class SignUpFormUserConverter {
         user.setLocation(
                 locationRepository.findByCity_NameAndCountry_Name(signUpUserData.getCity(), signUpUserData.getCountry())
                         .orElseGet(() -> new Location(signUpUserData.getCity(), signUpUserData.getCountry())));
-        user.setFacebookId(signUpUserData.getFacebookP());
-        user.setContact(signUpUserData.getContact());
 
 
         signUpUserData.getWorkList().forEach(e -> {
@@ -56,6 +59,10 @@ public class SignUpFormUserConverter {
         });
 
         return user;
+    }
+
+    User getByUsername(SignUpForm signUpUserData) {
+        return userService.getByUsername(signUpUserData.getEmail()).get();
     }
 
 }

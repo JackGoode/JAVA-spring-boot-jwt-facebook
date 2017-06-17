@@ -17,17 +17,10 @@ import java.util.Map;
         "email",
         "country",
         "city",
-        "passion",
         "educationList",
-        "workList",
-        "helpProposition",
-        "addedProposition",
-        "interests",
-        "facebookP",
-        "linkedinP",
-        "contact"
+        "workList"
 })
-public class SignUpForm {
+public class SignUpForm extends JsonUserObject {
 
     @JsonProperty("first_name")
     private String firstName;
@@ -39,24 +32,9 @@ public class SignUpForm {
     private String country;
     @JsonProperty("city")
     private String city;
-    @JsonProperty("passion")
-    private Object passion;
-    @JsonProperty("educationList")
     private List<EducationList> educationList = new ArrayList<EducationList>();
     @JsonProperty("workList")
     private List<WorkList> workList = new ArrayList<WorkList>();
-    @JsonProperty("helpProposition")
-    private Object helpProposition;
-    @JsonProperty("addedProposition")
-    private Object addedProposition;
-    @JsonProperty("interests")
-    private Object interests;
-    @JsonProperty("facebookP")
-    private String facebookP;
-    @JsonProperty("linkedinP")
-    private String linkedinP;
-    @JsonProperty("contact")
-    private String contact;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -110,16 +88,6 @@ public class SignUpForm {
         this.city = city;
     }
 
-    @JsonProperty("passion")
-    public Object getPassion() {
-        return passion;
-    }
-
-    @JsonProperty("passion")
-    public void setPassion(Object passion) {
-        this.passion = passion;
-    }
-
     @JsonProperty("educationList")
     public List<EducationList> getEducationList() {
         return educationList;
@@ -140,66 +108,6 @@ public class SignUpForm {
         this.workList = workList;
     }
 
-    @JsonProperty("helpProposition")
-    public Object getHelpProposition() {
-        return helpProposition;
-    }
-
-    @JsonProperty("helpProposition")
-    public void setHelpProposition(Object helpProposition) {
-        this.helpProposition = helpProposition;
-    }
-
-    @JsonProperty("addedProposition")
-    public Object getAddedProposition() {
-        return addedProposition;
-    }
-
-    @JsonProperty("addedProposition")
-    public void setAddedProposition(Object addedProposition) {
-        this.addedProposition = addedProposition;
-    }
-
-    @JsonProperty("interests")
-    public Object getInterests() {
-        return interests;
-    }
-
-    @JsonProperty("interests")
-    public void setInterests(Object interests) {
-        this.interests = interests;
-    }
-
-    @JsonProperty("facebookP")
-    public String getFacebookP() {
-        return facebookP;
-    }
-
-    @JsonProperty("facebookP")
-    public void setFacebookP(String facebookP) {
-        this.facebookP = facebookP;
-    }
-
-    @JsonProperty("linkedinP")
-    public String getLinkedinP() {
-        return linkedinP;
-    }
-
-    @JsonProperty("linkedinP")
-    public void setLinkedinP(String linkedinP) {
-        this.linkedinP = linkedinP;
-    }
-
-    @JsonProperty("contact")
-    public String getContact() {
-        return contact;
-    }
-
-    @JsonProperty("contact")
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -217,7 +125,7 @@ public class SignUpForm {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(firstName).append(lastName).append(email).append(country).append(city).append(passion).append(educationList).append(workList).append(helpProposition).append(addedProposition).append(interests).append(facebookP).append(linkedinP).append(contact).append(additionalProperties).toHashCode();
+        return new HashCodeBuilder().append(firstName).append(lastName).append(email).append(country).append(city).append(educationList).append(workList).append(additionalProperties).toHashCode();
     }
 
     @Override
@@ -229,7 +137,7 @@ public class SignUpForm {
             return false;
         }
         SignUpForm rhs = ((SignUpForm) other);
-        return new EqualsBuilder().append(firstName, rhs.firstName).append(lastName, rhs.lastName).append(email, rhs.email).append(country, rhs.country).append(city, rhs.city).append(passion, rhs.passion).append(educationList, rhs.educationList).append(workList, rhs.workList).append(helpProposition, rhs.helpProposition).append(addedProposition, rhs.addedProposition).append(interests, rhs.interests).append(facebookP, rhs.facebookP).append(linkedinP, rhs.linkedinP).append(contact, rhs.contact).append(additionalProperties, rhs.additionalProperties).isEquals();
+        return new EqualsBuilder().append(firstName, rhs.firstName).append(lastName, rhs.lastName).append(email, rhs.email).append(country, rhs.country).append(city, rhs.city).append(educationList, rhs.educationList).append(workList, rhs.workList).append(additionalProperties, rhs.additionalProperties).isEquals();
     }
 
 }

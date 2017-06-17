@@ -4,6 +4,7 @@ import com.eagulyi.user.entity.*;
 import com.eagulyi.user.model.json.facebook.Concentration;
 import com.eagulyi.user.model.json.facebook.FacebookUserData;
 import com.eagulyi.user.repository.LocationRepository;
+import com.eagulyi.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,23 +19,24 @@ import java.util.stream.Collectors;
  * Created by eugene on 5/26/17.
  */
 @Service
-public class FacebookUserConverter {
+public class FacebookUserConverter implements UserConverter<FacebookUserData> {
 
     private final LocationRepository locationRepository;
+    private final UserService userService;
 
     @Autowired
-    public FacebookUserConverter(LocationRepository locationRepository) {
+    public FacebookUserConverter(LocationRepository locationRepository, UserService userService) {
         this.locationRepository = locationRepository;
+        this.userService = userService;
     }
 
     public User convert(FacebookUserData facebookUser) {
-        User user = new User();
+        User user = userService.getByUsername(facebookUser.getEmail()).orElseGet(User::new);
         user.setDataProvider(DataProvider.FACEBOOK);
         user.setUsername(facebookUser.getEmail());
         user.setFirstName(facebookUser.getFirstName());
         user.setLastName(facebookUser.getLastName());
         user.setCreationDate(LocalDateTime.now());
-        user.setFacebookId(facebookUser.getId());
         user.setLocation(getLocationFromMap((Map) facebookUser.getLocation().getAdditionalProperties().get("location")));
         facebookUser.getWork().forEach(e -> {
             Work work = new Work(e.getEmployer().getName(),

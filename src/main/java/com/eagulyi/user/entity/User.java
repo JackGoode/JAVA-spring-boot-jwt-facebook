@@ -43,24 +43,6 @@ public class User implements Serializable {
     @Column(name = "provider")
     private DataProvider dataProvider;
 
-    @Column(name = "facebookId", unique = true)
-    private String facebookId;
-
-    @Column(name = "passion")
-    private String passion;
-
-    @Column(name = "helpProposition")
-    private String helpProposition;
-
-    @Column(name = "addedProposition")
-    private String addedProposition;
-
-    @Column(name = "interests")
-    private String interests;
-
-    @Column(name = "contact")
-    private String contact;
-
     // TODO: fix duplication issue/ add constraint
     @ManyToOne(cascade = ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id")
@@ -135,54 +117,6 @@ public class User implements Serializable {
 
     public void setDataProvider(DataProvider dataProvider) {
         this.dataProvider = dataProvider;
-    }
-
-    public String getFacebookId() {
-        return facebookId;
-    }
-
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
-    }
-
-    public String getPassion() {
-        return passion;
-    }
-
-    public void setPassion(String passion) {
-        this.passion = passion;
-    }
-
-    public String getHelpProposition() {
-        return helpProposition;
-    }
-
-    public void setHelpProposition(String helpProposition) {
-        this.helpProposition = helpProposition;
-    }
-
-    public String getAddedProposition() {
-        return addedProposition;
-    }
-
-    public void setAddedProposition(String addedProposition) {
-        this.addedProposition = addedProposition;
-    }
-
-    public String getInterests() {
-        return interests;
-    }
-
-    public void setInterests(String interests) {
-        this.interests = interests;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
     }
 
     public Location getLocation() {

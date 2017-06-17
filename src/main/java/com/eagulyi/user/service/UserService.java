@@ -1,7 +1,7 @@
 package com.eagulyi.user.service;
 
-import com.eagulyi.user.entity.User;
 import com.eagulyi.security.auth.ajax.LoginRequest;
+import com.eagulyi.user.entity.User;
 
 import java.util.Optional;
 
@@ -10,8 +10,6 @@ import java.util.Optional;
  */
 public interface UserService {
     Optional<User> getByUsername(String username);
-
-    Optional<User> getByFacebookId(String userId);
 
     User createDefaultUser(User user);
 

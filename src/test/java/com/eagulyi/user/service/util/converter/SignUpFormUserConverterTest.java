@@ -1,15 +1,17 @@
 package com.eagulyi.user.service.util.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.user.entity.Education;
 import com.eagulyi.user.entity.Speciality;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.entity.Work;
 import com.eagulyi.user.model.json.signup.SignUpForm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,17 +26,19 @@ import java.io.IOException;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SignUpFormUserConverterTest {
 
-    private User user = new User();
-    private static SignUpForm form;
+    private static User user;
 
     @Autowired
+    @Spy
     private SignUpFormUserConverter signUpFormUserConverter;
 
     @Before
     public void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        form = mapper.readValue(new File("src/test/resources/signUpForm.json"), SignUpForm.class);
-        user = signUpFormUserConverter.convert(form, user);
+//        SignUpFormUserConverter signUpFormUserConverterSpy = Mockito.spy(signUpFormUserConverter);
+        SignUpForm signUpUserData = mapper.readValue(new File("src/test/resources/signUpForm.json"), SignUpForm.class);
+        Mockito.doReturn(new User()).when(signUpFormUserConverter).getByUsername(signUpUserData);
+        user = signUpFormUserConverter.convert(signUpUserData);
     }
 
     @Test
@@ -44,13 +48,8 @@ public class SignUpFormUserConverterTest {
         Assert.isTrue(user.getUsername().equals("eagulyi@gmail.com"));
         Assert.isTrue(user.getLocation().getCountry().getName().equals("Ukraine"));
         Assert.isTrue(user.getLocation().getCity().getName().equals("Kyiv"));
-        Assert.isTrue(user.getPassion() == null);
         Assert.isTrue(user.getEducationItems().size() == 2);
         Assert.isTrue(user.getWorkItems().size() == 3);
-        Assert.isTrue(user.getHelpProposition() == null);
-        Assert.isTrue(user.getInterests() == null);
-        Assert.isTrue(user.getFacebookId().equals("347759925585713"));
-        Assert.isTrue(user.getContact().equals("321"));
     }
 
     @Test
