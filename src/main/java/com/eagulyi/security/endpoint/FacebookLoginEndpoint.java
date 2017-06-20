@@ -2,6 +2,7 @@ package com.eagulyi.security.endpoint;
 
 import com.eagulyi.facebook.model.token.ConvertTokenException;
 import com.eagulyi.facebook.model.token.InvalidTokenException;
+import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
 import com.eagulyi.security.config.WebSecurityConfig;
 import com.eagulyi.security.model.UserContext;
@@ -83,6 +84,15 @@ public class FacebookLoginEndpoint {
 
         objectMapper.writeValue(response.getWriter(), tokenFactory.createTokenPair(userContext));
     }
+
+    @RequestMapping(value = "/api/me/fbData", method = RequestMethod.GET)
+    public @ResponseBody
+    FacebookUserData getUserFbData(JwtAuthenticationToken token, HttpServletResponse response) throws IOException {
+        UserContext userContext = (UserContext) token.getPrincipal();
+        User user = userService.getByUsername(userContext.getUsername()).get(); // TODO handle optional
+        return facebookService.getFbData(user.getUsername());
+    }
+
 
 
 }

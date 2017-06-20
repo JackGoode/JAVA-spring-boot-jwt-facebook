@@ -35,7 +35,6 @@ public class SignUpFormUserConverterTest {
     @Before
     public void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-//        SignUpFormUserConverter signUpFormUserConverterSpy = Mockito.spy(signUpFormUserConverter);
         SignUpForm signUpUserData = mapper.readValue(new File("src/test/resources/signUpForm.json"), SignUpForm.class);
         Mockito.doReturn(new User()).when(signUpFormUserConverter).getByUsername(signUpUserData);
         user = signUpFormUserConverter.convert(signUpUserData);

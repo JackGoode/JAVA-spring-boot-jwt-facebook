@@ -9,4 +9,3 @@ import com.eagulyi.user.model.json.signup.JsonUserObject;
 public interface UserConverter<T extends JsonUserObject> {
     User convert(T userObject);
 }
-

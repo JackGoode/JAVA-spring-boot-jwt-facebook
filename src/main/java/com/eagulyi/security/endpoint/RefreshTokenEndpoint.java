@@ -1,5 +1,6 @@
 package com.eagulyi.security.endpoint;
 
+import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
 import com.eagulyi.security.config.JwtSettings;
 import com.eagulyi.security.config.WebSecurityConfig;
@@ -66,4 +67,11 @@ public class RefreshTokenEndpoint {
 
         return tokenFactory.createAccessJwtToken(userContext);
     }
+
+    @RequestMapping(value = "/api/me", method = RequestMethod.GET)
+    public @ResponseBody
+    UserContext get(JwtAuthenticationToken token) {
+        return (UserContext) token.getPrincipal();
+    }
+
 }
