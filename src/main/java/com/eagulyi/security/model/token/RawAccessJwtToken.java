@@ -1,18 +1,10 @@
 package com.eagulyi.security.model.token;
 
+import com.eagulyi.facebook.model.token.InvalidTokenException;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
-
-import com.eagulyi.security.exceptions.JwtExpiredTokenException;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 public class RawAccessJwtToken implements JwtToken {
     private static Logger logger = LoggerFactory.getLogger(RawAccessJwtToken.class);
@@ -27,7 +19,7 @@ public class RawAccessJwtToken implements JwtToken {
      * Parses and validates JWT Token signature.
      * 
      * @throws BadCredentialsException
-     * @throws JwtExpiredTokenException
+     * @throws InvalidTokenException
      * 
      */
     public Jws<Claims> parseClaims(String signingKey) {
@@ -38,7 +30,7 @@ public class RawAccessJwtToken implements JwtToken {
             throw new BadCredentialsException("Invalid JWT token: ", ex);
         } catch (ExpiredJwtException expiredEx) {
             logger.info("JWT Token is expired", expiredEx);
-            throw new JwtExpiredTokenException(this, "JWT Token expired", expiredEx);
+            throw new InvalidTokenException("JWT Token expired", expiredEx);
         }
     }
 

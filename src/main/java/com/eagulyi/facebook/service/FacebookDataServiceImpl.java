@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Created by eugene on 1/20/17.
  */
 @Service
-public class DataProviderServiceImpl {
+public class FacebookDataServiceImpl {
     @Value("${com.eagulyi.appId}")
     private String appId;
 
@@ -37,7 +37,7 @@ public class DataProviderServiceImpl {
     private final UserTokenRepository userTokenRepository;
 
     @Autowired
-    public DataProviderServiceImpl(UserTokenRepository userTokenRepository) {
+    public FacebookDataServiceImpl(UserTokenRepository userTokenRepository) {
         this.userTokenRepository = userTokenRepository;
     }
 

@@ -1,19 +1,18 @@
 package com.eagulyi.security.exceptions;
 
+import com.eagulyi.security.model.token.JwtToken;
 import org.springframework.security.core.AuthenticationException;
 
-import com.eagulyi.security.model.token.JwtToken;
-
-public class JwtExpiredTokenException extends AuthenticationException {
+public class InvalidTokenException extends AuthenticationException {
     private static final long serialVersionUID = -5959543783324224864L;
     
     private JwtToken token;
 
-    public JwtExpiredTokenException(String msg) {
+    public InvalidTokenException(String msg) {
         super(msg);
     }
 
-    public JwtExpiredTokenException(JwtToken token, String msg, Throwable t) {
+    public InvalidTokenException(JwtToken token, String msg, Throwable t) {
         super(msg, t);
         this.token = token;
     }

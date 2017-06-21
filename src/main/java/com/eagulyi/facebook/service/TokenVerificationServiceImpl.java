@@ -6,9 +6,12 @@ import com.eagulyi.facebook.model.token.Error;
 import com.eagulyi.facebook.repository.UserTokenRepository;
 import com.eagulyi.facebook.util.Field;
 import com.eagulyi.security.model.token.AccessJwtToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,19 +40,21 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
     private static final String VERIFY_PATH = "debug_token";
 
     private final UserTokenRepository userTokenRepository;
-    private final DataProviderServiceImpl dataProviderService;
+    private final FacebookDataServiceImpl dataProviderService;
 
     private final RestTemplate template = new RestTemplate();
 
+    private static final Logger LOG = LoggerFactory.getLogger(TokenVerificationServiceImpl.class);
+
     @Autowired
-    public TokenVerificationServiceImpl(UserTokenRepository userTokenRepository, DataProviderServiceImpl dataProviderService) {
+    public TokenVerificationServiceImpl(UserTokenRepository userTokenRepository, FacebookDataServiceImpl dataProviderService) {
         this.userTokenRepository = userTokenRepository;
         this.dataProviderService = dataProviderService;
     }
 
     @Override
     @Transactional
-    public String verify(String token) throws ConvertTokenException, InvalidTokenException {
+    public String verify(String token) throws AuthenticationException {
         String fbId = getIdFromFBAccessToken(token);
         String longTermToken = convertToLongTermToken(token);
         UserToken userToken = new UserToken(fbId, longTermToken);
@@ -63,7 +68,7 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
 
     private String getIdFromFBAccessToken(String token) throws InvalidTokenException {
         String fbId = "";
-        Optional<TokenData> tokenDataOptional = Optional.ofNullable(extract(token).getTokenData());
+        Optional<TokenData> tokenDataOptional = Optional.ofNullable(verifyAndExtract(token).getTokenData());
         if (tokenDataOptional.isPresent()) {
             TokenData tokenData = tokenDataOptional.get();
             if (tokenData.getIsValid()) {
@@ -71,13 +76,14 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
                     fbId = tokenData.getUserId();
                 }
             } else {
+                LOG.error("Invalid token");
                 throw new InvalidTokenException(tokenData.getError().getMessage());
             }
         }
         return fbId;
     }
 
-    private AccessTokenData extract(String token) {
+    private AccessTokenData verifyAndExtract(String token) throws InvalidTokenException {
         URI verifyTokenUri = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host(facebookUrl)
@@ -88,8 +94,7 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
         ResponseEntity<AccessTokenData> response = template.getForEntity(verifyTokenUri, AccessTokenData.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody();
-        } else
-            return fallbackAuthenticationResponse(response.getStatusCodeValue() + response.getStatusCode().getReasonPhrase());
+        } else throw new InvalidTokenException(response.getStatusCode().getReasonPhrase());
     }
 
     private String convertToLongTermToken(String token) throws ConvertTokenException {
@@ -106,8 +111,10 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
         ResponseEntity<AccessJwtToken> response = template.getForEntity(exchangeTokenUri, AccessJwtToken.class);
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody().getToken();
-        } else
+        } else {
+            LOG.error("Error while converting facebook access token ");
             throw new ConvertTokenException(response.getStatusCodeValue() + response.getStatusCode().getReasonPhrase());
+        }
     }
 
     private AccessTokenData fallbackAuthenticationResponse(String errorMessage) {

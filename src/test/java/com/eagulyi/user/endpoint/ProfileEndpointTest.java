@@ -3,7 +3,6 @@ package com.eagulyi.user.endpoint;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.security.model.token.JwtToken;
 import com.eagulyi.security.model.token.JwtTokenFactory;
-import com.eagulyi.user.entity.DataProvider;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.model.json.signup.SignUpForm;
 import com.eagulyi.user.repository.UserRepository;
@@ -61,7 +60,6 @@ public class ProfileEndpointTest {
     @Autowired
     private JwtTokenFactory tokenFactory;
 
-
     @Autowired
     private UserRepository userRepository;
 
@@ -105,36 +103,38 @@ public class ProfileEndpointTest {
 
     @Test
     public void incorrectTokenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/me/profile/get")
+        mockMvc.perform(get("/api/profile/get")
                 .header("X-Authorization", "Bearer " + this.token.getToken().substring(1)))
                 .andExpect(status().is(401));
     }
 
     @Test
     public void noTokenUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/me/profile/get"))
+        mockMvc.perform(get("/api/profile/get"))
                 .andExpect(status().is(401));
     }
 
     @Test
     public void readOwnProfile() throws Exception {
-        mockMvc.perform(get("/api/me/profile/get")
+        mockMvc.perform(get("/api/profile/get")
                 .header("X-Authorization", "Bearer " + this.token.getToken()))
                 .andExpect(content().contentType(contentType))
                 .andExpect(status().is2xxSuccessful());
     }
 
+    //*
+    // Simulate filling sign up form (adding a city of residence)
+    // tests if the profile is saved
+    // */
     @Test
     public void saveOwnProfile() throws Exception {
-        this.user.setDataProvider(DataProvider.INTERNAL);
-
         SignUpForm form = new SignUpForm();
         form.setFirstName(this.user.getFirstName());
         form.setLastName(this.user.getLastName());
         form.setEmail(this.user.getUsername());
         form.setCity("Kyiv");
 
-        mockMvc.perform(post("/api/me/profile/save")
+        mockMvc.perform(post("/api/profile/save")
                 .header("X-Authorization", "Bearer " + this.token.getToken())
                 .content(json(form))
                 .contentType(contentType))
@@ -144,7 +144,7 @@ public class ProfileEndpointTest {
         Assert.isTrue(user.getLocation().getCity().getName().equals("Kyiv"));
     }
 
-    protected String json(Object o) throws IOException {
+    private String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         this.mappingJackson2HttpMessageConverter.write(
                 o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);

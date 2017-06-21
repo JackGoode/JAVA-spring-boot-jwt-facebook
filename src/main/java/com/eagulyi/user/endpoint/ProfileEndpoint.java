@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/me/profile")
+@RequestMapping("/api/profile")
 public class ProfileEndpoint {
     private final ObjectMapper objectMapper;
     private final UserService userService;

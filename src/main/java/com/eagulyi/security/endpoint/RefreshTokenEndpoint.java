@@ -1,10 +1,10 @@
 package com.eagulyi.security.endpoint;
 
+import com.eagulyi.facebook.model.token.InvalidTokenException;
 import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
 import com.eagulyi.security.config.JwtSettings;
 import com.eagulyi.security.config.WebSecurityConfig;
-import com.eagulyi.security.exceptions.InvalidJwtToken;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.security.model.token.JwtToken;
 import com.eagulyi.security.model.token.JwtTokenFactory;
@@ -53,7 +53,7 @@ public class RefreshTokenEndpoint {
         String tokenPayload = tokenExtractor.extract(request.getHeader(WebSecurityConfig.JWT_TOKEN_HEADER_PARAM));
 
         RawAccessJwtToken rawToken = new RawAccessJwtToken(tokenPayload);
-        RefreshToken refreshToken = RefreshToken.create(rawToken, jwtSettings.getTokenSigningKey()).orElseThrow(InvalidJwtToken::new);
+        RefreshToken refreshToken = RefreshToken.create(rawToken, jwtSettings.getTokenSigningKey()).orElseThrow(() -> new InvalidTokenException("Invalid token"));
 
         String subject = refreshToken.getSubject();
         User user = userService.getByUsername(subject).orElseThrow(() -> new UsernameNotFoundException("User not found: " + subject));

@@ -1,15 +1,13 @@
 package com.eagulyi.security.model.token;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.security.authentication.BadCredentialsException;
-
-import com.eagulyi.security.exceptions.JwtExpiredTokenException;
+import com.eagulyi.security.exceptions.InvalidTokenException;
 import com.eagulyi.security.model.Scopes;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import org.springframework.security.authentication.BadCredentialsException;
+
+import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 public class RefreshToken implements JwtToken {
@@ -26,7 +24,7 @@ public class RefreshToken implements JwtToken {
      * @param signingKey
      * 
      * @throws BadCredentialsException
-     * @throws JwtExpiredTokenException
+     * @throws InvalidTokenException
      * 
      * @return
      */
