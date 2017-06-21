@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String FB_TOKEN_HEADER_PARAM = "FB-Access-Token";
 
     private static final String FORM_BASED_LOGIN_ENTRY_POINT = "/api/auth/login";
-    private static final String FACEBOOK_LOGIN_ENTRY_POINT = "/api/auth/facebookLogin";
+    private static final String FACEBOOK_LOGIN_ENTRY_POINT = "/api/fb/login";
     private static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     private static final String TOKEN_REFRESH_ENTRY_POINT = "/api/auth/token";
     private static final String SIGNUP_ENTRY_POINT = "/api/signup";
