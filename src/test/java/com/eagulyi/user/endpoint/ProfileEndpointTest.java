@@ -122,10 +122,10 @@ public class ProfileEndpointTest {
                 .andExpect(status().is2xxSuccessful());
     }
 
-    //*
-    // Simulate filling sign up form (adding a city of residence)
-    // tests if the profile is saved
-    // */
+    /**
+     * Simulate filling sign up form (adding a city of residence) <br>
+     * tests if the profile is saved
+     */
     @Test
     public void saveOwnProfile() throws Exception {
         SignUpForm form = new SignUpForm();

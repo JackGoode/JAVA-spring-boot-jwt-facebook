@@ -2,7 +2,7 @@ package com.eagulyi.security.endpoint;
 
 import com.eagulyi.common.ErrorCode;
 import com.eagulyi.common.ErrorResponse;
-import com.eagulyi.common.WebUtil;
+import com.eagulyi.common.ServletUtil;
 import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.config.WebSecurityConfig;
 import com.eagulyi.security.model.UserContext;
@@ -35,17 +35,17 @@ import java.io.IOException;
 public class FacebookEndpoint {
     private final JwtTokenFactory tokenFactory;
     private final UserServiceImpl userService;
-    private final WebUtil webUtil;
+    private final ServletUtil servletUtil;
     private final FacebookService facebookService;
 
     @Autowired
     public FacebookEndpoint(JwtTokenFactory tokenFactory,
                             UserServiceImpl userService,
-                            WebUtil webUtil,
+                            ServletUtil servletUtil,
                             FacebookService facebookService) {
         this.tokenFactory = tokenFactory;
         this.userService = userService;
-        this.webUtil = webUtil;
+        this.servletUtil = servletUtil;
         this.facebookService = facebookService;
     }
 
@@ -58,10 +58,10 @@ public class FacebookEndpoint {
             UserContext userContext = facebookService.processFbToken(request.getHeader(WebSecurityConfig.FB_TOKEN_HEADER_PARAM));
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            webUtil.writeServletResponse(response, tokenFactory.createTokenPair(userContext));
+            servletUtil.writeServletResponse(response, tokenFactory.createTokenPair(userContext));
         } catch (AuthenticationException e) {
             LOG.error(e.getMessage());
-            webUtil.writeServletResponse(response, ErrorResponse.of("Cannot authenticate", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
+            servletUtil.writeServletResponse(response, ErrorResponse.of("Cannot authenticate", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
         }
     }
 

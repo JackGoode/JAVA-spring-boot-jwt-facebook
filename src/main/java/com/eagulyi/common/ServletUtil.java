@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class WebUtil {
-    private static final Logger LOG = LoggerFactory.getLogger(WebUtil.class);
+public class ServletUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(ServletUtil.class);
 
     private static final String XML_HTTP_REQUEST = "XMLHttpRequest";
     private static final String X_REQUESTED_WITH = "X-Requested-With";
