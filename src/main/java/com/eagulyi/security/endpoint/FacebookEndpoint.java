@@ -1,7 +1,5 @@
 package com.eagulyi.security.endpoint;
 
-import com.eagulyi.common.ErrorCode;
-import com.eagulyi.common.ErrorResponse;
 import com.eagulyi.common.ServletUtil;
 import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.config.WebSecurityConfig;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,15 +51,10 @@ public class FacebookEndpoint {
     @RequestMapping(value = "/login", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Transactional
     public void facebookLogin(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            UserContext userContext = facebookService.processFbToken(request.getHeader(WebSecurityConfig.FB_TOKEN_HEADER_PARAM));
-            response.setStatus(HttpStatus.OK.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            servletUtil.writeServletResponse(response, tokenFactory.createTokenPair(userContext));
-        } catch (AuthenticationException e) {
-            LOG.error(e.getMessage());
-            servletUtil.writeServletResponse(response, ErrorResponse.of("Cannot authenticate", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED));
-        }
+        UserContext userContext = facebookService.processFbToken(request.getHeader(WebSecurityConfig.FB_TOKEN_HEADER_PARAM));
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        servletUtil.writeServletResponse(response, tokenFactory.createTokenPair(userContext));
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)

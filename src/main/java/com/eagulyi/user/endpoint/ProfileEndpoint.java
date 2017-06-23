@@ -1,5 +1,6 @@
 package com.eagulyi.user.endpoint;
 
+import com.eagulyi.common.ServletUtil;
 import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.user.entity.User;
@@ -27,17 +28,19 @@ public class ProfileEndpoint {
     private final ObjectMapper objectMapper;
     private final UserService userService;
     private final SignUpFormUserConverter signUpFormUserConverter;
+    private final ServletUtil servletUtil;
 
     @Autowired
-    public ProfileEndpoint(ObjectMapper objectMapper, UserService userService, SignUpFormUserConverter signUpFormUserConverter) {
+    public ProfileEndpoint(ObjectMapper objectMapper, UserService userService, SignUpFormUserConverter signUpFormUserConverter, ServletUtil servletUtil) {
         this.objectMapper = objectMapper;
         this.signUpFormUserConverter = signUpFormUserConverter;
+        this.servletUtil = servletUtil;
         this.objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         this.userService = userService;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public void getUserProfile(JwtAuthenticationToken token, HttpServletResponse response) throws IOException {
+    public void getUserProfile(JwtAuthenticationToken token, HttpServletResponse response) {
         UserContext userContext = (UserContext) token.getPrincipal();
         System.out.println("Requesting user " + userContext.getUsername() + " timestamp: " + LocalDateTime.now());
         User user = userService.getByUsername(userContext.getUsername()).get();
@@ -47,14 +50,19 @@ public class ProfileEndpoint {
         responseMap.put("first_name", user.getFirstName());
         responseMap.put("last_name", user.getLastName());
         response.setContentType("application/json;charset=UTF-8");
-        objectMapper.writeValue(response.getWriter(), responseMap);
+        servletUtil.writeServletResponse(response, responseMap);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public void saveProfile(HttpServletRequest request) throws IOException {
-        String userString = request.getReader().lines().collect(Collectors.joining());
-        SignUpForm signUpUserData = objectMapper.readValue(userString, SignUpForm.class);
-        userService.save(signUpFormUserConverter.convert(signUpUserData));
+    public void saveProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String userString = request.getReader().lines().collect(Collectors.joining());
+            SignUpForm signUpUserData = objectMapper.readValue(userString, SignUpForm.class);
+            userService.save(signUpFormUserConverter.convert(signUpUserData));
+        } catch (IOException ioe) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("text/plain; charset=UTF-8");
+        }
     }
 
 

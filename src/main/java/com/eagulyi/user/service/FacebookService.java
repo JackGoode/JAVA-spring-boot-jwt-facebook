@@ -71,7 +71,6 @@ public class FacebookService {
     public UserContext processFbToken(String token) throws AuthenticationException {
         String tokenPayload = tokenExtractor.extract(token);
         String username;
-        String errorMessage = "";
         username = verifyToken(tokenPayload);
 
         User user = userService.getByUsername(username).orElseGet(() -> {

@@ -39,6 +39,7 @@ public class ServletUtil {
             objectMapper.writeValue(response.getWriter(), value);
         } catch (IOException ioe) {
             LOG.error("Cannot write servlet response", ioe);
+            throw new RuntimeException(ioe);
         }
     }
 
