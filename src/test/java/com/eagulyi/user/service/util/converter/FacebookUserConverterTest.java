@@ -5,8 +5,10 @@ import com.eagulyi.user.entity.Speciality;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.entity.Work;
 import com.eagulyi.user.model.json.facebook.FacebookUserData;
+import com.eagulyi.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.lang.Assert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,22 +26,32 @@ import java.io.IOException;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class FacebookUserConverterTest {
+
     @Autowired
     private FacebookUserConverter facebookUserConverter;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private static User user;
 
     @Before
+    @Transactional
     public void init() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         user = facebookUserConverter.convert(mapper.readValue(new File("src/test/resources/facebookUserData.json"), FacebookUserData.class));
+    }
+
+    @After
+    public void destroy() {
+        userRepository.deleteByUsername("test@gmail.com");
     }
 
     @Test
     public void test_generalInformationConverted() {
         Assert.isTrue(user.getFirstName().equals("Eugene"));
         Assert.isTrue(user.getLastName().equals("Gulyi"));
-        Assert.isTrue(user.getUsername().equals("eagulyi@gmail.com"));
+        Assert.isTrue(user.getUsername().equals("test@gmail.com"));
         Assert.isTrue(user.getLocation().getCountry().getName().equals("Ukraine"));
         Assert.isTrue(user.getLocation().getCity().getName().equals("Kyiv"));
         Assert.isTrue(user.getEducationItems().size() == 2);

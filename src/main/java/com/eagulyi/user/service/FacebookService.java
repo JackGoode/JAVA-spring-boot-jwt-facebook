@@ -7,12 +7,12 @@ import com.eagulyi.security.auth.jwt.extractor.TokenExtractor;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.model.json.facebook.FacebookUserData;
+import com.eagulyi.user.repository.UserRepository;
 import com.eagulyi.user.service.util.converter.FacebookUserConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,10 @@ public class FacebookService {
     private final TokenVerificationService verificationService;
     private final FacebookDataServiceImpl facebookDataService;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final FacebookUserConverter facebookUserConverter;
     private final TokenExtractor tokenExtractor;
+
 
     private static final Logger LOG = LoggerFactory.getLogger(FacebookService.class);
 
@@ -37,17 +39,18 @@ public class FacebookService {
     public FacebookService(TokenVerificationService verificationService,
                            FacebookDataServiceImpl facebookDataService,
                            UserService userService,
-                           FacebookUserConverter facebookUserConverter,
+                           UserRepository userRepository, FacebookUserConverter facebookUserConverter,
                            @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor) {
         this.verificationService = verificationService;
         this.facebookDataService = facebookDataService;
         this.userService = userService;
+        this.userRepository = userRepository;
         this.facebookUserConverter = facebookUserConverter;
         this.tokenExtractor = tokenExtractor;
     }
 
 
-    public String verifyToken(String facebookAccessToken) throws AuthenticationException {
+    public String verifyToken(String facebookAccessToken) {
         return verificationService.verify(facebookAccessToken);
     }
 
@@ -68,12 +71,14 @@ public class FacebookService {
      * @param token facebook access token
      * @return UserContext - object representing user
      */
-    public UserContext processFbToken(String token) throws AuthenticationException {
+    public UserContext processFbToken(String token) {
         String tokenPayload = tokenExtractor.extract(token);
         String username;
         username = verifyToken(tokenPayload);
+        LOG.debug("FB access token verified for user %s", username);
 
-        User user = userService.getByUsername(username).orElseGet(() -> {
+        User user = userRepository.findByUsername(username).orElseGet(() -> {
+            LOG.debug("First log in, registering account for %s", username);
             FacebookUserData facebookUser = getProfileData(username);
             User u = facebookUserConverter.convert(facebookUser);
             return userService.createDefaultUser(u);
@@ -82,6 +87,7 @@ public class FacebookService {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getRole().authority()))
                 .collect(Collectors.toList());
+
         return UserContext.create(user.getUsername(), authorities);
     }
 }

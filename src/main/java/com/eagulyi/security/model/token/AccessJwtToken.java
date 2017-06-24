@@ -1,7 +1,6 @@
 package com.eagulyi.security.model.token;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jsonwebtoken.Claims;
 
@@ -10,7 +9,7 @@ public final class AccessJwtToken implements JwtToken {
     private final String rawToken;
     @JsonIgnore private Claims claims;
 
-    public AccessJwtToken(@JsonProperty("access_token") String rawToken, @JsonProperty("bearer") String bearer) {
+    public AccessJwtToken(@JsonProperty("access_token") String rawToken) {
         this.rawToken = rawToken;
     }
 

@@ -2,6 +2,7 @@ package com.eagulyi.user.model.json.facebook;
 
 import com.eagulyi.user.entity.Role;
 import com.eagulyi.user.entity.UserRole;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by eugene on 5/30/17.
  */
+@Component
 public class UserUtil {
 
     public static List<UserRole> getDefaultRoles(String username) {

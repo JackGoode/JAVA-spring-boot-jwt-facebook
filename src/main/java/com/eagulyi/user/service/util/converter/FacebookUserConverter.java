@@ -31,7 +31,7 @@ public class FacebookUserConverter implements UserConverter<FacebookUserData> {
     }
 
     public User convert(FacebookUserData facebookUser) {
-        User user = userService.getByUsername(facebookUser.getEmail()).orElseGet(User::new);
+        User user = userService.getOrCreateUser(facebookUser.getEmail());
         user.setDataProvider(DataProvider.FACEBOOK);
         user.setUsername(facebookUser.getEmail());
         user.setFirstName(facebookUser.getFirstName());
@@ -75,12 +75,7 @@ public class FacebookUserConverter implements UserConverter<FacebookUserData> {
         String city = location[0];
         String country = location[1];
 
-        switch (location.length) {
-            case 2:
-                return locationRepository.findByCity_NameAndCountry_Name(city, country).orElseGet(() -> new Location(city, country));
-            default:
-                return null;
-        }
+        return location.length == 2 ? locationRepository.findByCity_NameAndCountry_Name(city, country).orElseGet(() -> new Location(city, country)) : null;
     }
 
 

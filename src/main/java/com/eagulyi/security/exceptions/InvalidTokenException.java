@@ -5,11 +5,12 @@ import org.springframework.security.core.AuthenticationException;
 
 public class InvalidTokenException extends AuthenticationException {
     private static final long serialVersionUID = -5959543783324224864L;
-    
-    private JwtToken token;
 
-    public InvalidTokenException(String msg) {
+    private final JwtToken token;
+
+    public InvalidTokenException(JwtToken token, String msg) {
         super(msg);
+        this.token = token;
     }
 
     public InvalidTokenException(JwtToken token, String msg, Throwable t) {

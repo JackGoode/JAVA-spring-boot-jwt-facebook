@@ -21,7 +21,7 @@ public class Year {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("name")
     public String getName() {
@@ -68,7 +68,7 @@ public class Year {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Year) == false) {
+        if (!(other instanceof Year)) {
             return false;
         }
         Year rhs = ((Year) other);

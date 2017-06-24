@@ -97,4 +97,14 @@ public class Work implements Comparable<Work> {
     public int compareTo(Work o) {
         return this.startDate.compareTo(o.getStartDate());
     }
+
+    @Override
+    public int hashCode() {
+        return this.startDate.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Work && this.getStartDate().equals(((Work) obj).getStartDate());
+    }
 }

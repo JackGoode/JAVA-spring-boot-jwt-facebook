@@ -21,7 +21,7 @@ public class Employer {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("name")
     public String getName() {
@@ -68,7 +68,7 @@ public class Employer {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Employer) == false) {
+        if (!(other instanceof Employer)) {
             return false;
         }
         Employer rhs = ((Employer) other);

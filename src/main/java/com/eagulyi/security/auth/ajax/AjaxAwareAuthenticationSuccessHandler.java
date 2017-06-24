@@ -1,8 +1,10 @@
 package com.eagulyi.security.auth.ajax;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.security.model.token.JwtTokenFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import java.io.IOException;
 public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final ObjectMapper mapper;
     private final JwtTokenFactory tokenFactory;
+    private static final Logger LOG = LoggerFactory.getLogger(AjaxAwareAuthenticationSuccessHandler.class);
 
     @Autowired
     public AjaxAwareAuthenticationSuccessHandler(final ObjectMapper mapper, final JwtTokenFactory tokenFactory) {
@@ -38,7 +41,7 @@ public class AjaxAwareAuthenticationSuccessHandler implements AuthenticationSucc
         mapper.writeValue(response.getWriter(), tokenFactory.createTokenPair(userContext));
 
         clearAuthenticationAttributes(request);
-        System.out.println("Authenticated successfully ");
+        LOG.info("Authenticated successfully ");
     }
 
     /**

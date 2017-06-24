@@ -1,8 +1,10 @@
 package com.eagulyi.facebook.service;
 
 import com.eagulyi.facebook.model.entity.UserToken;
-import com.eagulyi.facebook.model.token.*;
-import com.eagulyi.facebook.model.token.Error;
+import com.eagulyi.facebook.model.token.AccessTokenData;
+import com.eagulyi.facebook.model.token.ConvertTokenException;
+import com.eagulyi.facebook.model.token.InvalidTokenException;
+import com.eagulyi.facebook.model.token.TokenData;
 import com.eagulyi.facebook.repository.UserTokenRepository;
 import com.eagulyi.facebook.util.Field;
 import com.eagulyi.security.model.token.AccessJwtToken;
@@ -11,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,10 +27,10 @@ import java.util.Optional;
 @Service
 public class TokenVerificationServiceImpl implements TokenVerificationService {
     @Value("${com.eagulyi.appId}")
-    private String APP_ID;
+    private String appId;
 
     @Value("${com.eagulyi.appSecret}")
-    private String APP_SECRET;
+    private String appSecret;
 
     @Value("${com.eagulyi.facebook-api-url}")
     private String facebookUrl;
@@ -54,19 +55,17 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
 
     @Override
     @Transactional
-    public String verify(String token) throws AuthenticationException {
+    public String verify(String token) {
         String fbId = getIdFromFBAccessToken(token);
         String longTermToken = convertToLongTermToken(token);
         UserToken userToken = new UserToken(fbId, longTermToken);
         String username = dataProviderService.getForToken(userToken, Field.EMAIL).getEmail();
-        // TODO: async
         userToken.setUsername(username);
         userTokenRepository.save(userToken);
-        // /async
         return username;
     }
 
-    private String getIdFromFBAccessToken(String token) throws InvalidTokenException {
+    private String getIdFromFBAccessToken(String token) {
         String fbId = "";
         Optional<TokenData> tokenDataOptional = Optional.ofNullable(verifyAndExtract(token).getTokenData());
         if (tokenDataOptional.isPresent()) {
@@ -83,13 +82,13 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
         return fbId;
     }
 
-    private AccessTokenData verifyAndExtract(String token) throws InvalidTokenException {
+    private AccessTokenData verifyAndExtract(String token) {
         URI verifyTokenUri = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host(facebookUrl)
                 .path(VERIFY_PATH)
                 .queryParam("input_token", token)
-                .queryParam("access_token", APP_ID + "|" + APP_SECRET)
+                .queryParam("access_token", appId + "|" + appSecret)
                 .build().toUri();
         ResponseEntity<AccessTokenData> response = template.getForEntity(verifyTokenUri, AccessTokenData.class);
         if (response.getStatusCode().is2xxSuccessful()) {
@@ -97,14 +96,14 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
         } else throw new InvalidTokenException(response.getStatusCode().getReasonPhrase());
     }
 
-    private String convertToLongTermToken(String token) throws ConvertTokenException {
+    private String convertToLongTermToken(String token) {
         URI exchangeTokenUri = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host(facebookUrl)
                 .path("/oauth/access_token")
                 .queryParam("grant_type", "fb_exchange_token")
-                .queryParam("client_id", APP_ID)
-                .queryParam("client_secret", APP_SECRET)
+                .queryParam("client_id", appId)
+                .queryParam("client_secret", appSecret)
                 .queryParam("fb_exchange_token", token)
                 .build().toUri();
 
@@ -115,17 +114,6 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
             LOG.error("Error while converting facebook access token ");
             throw new ConvertTokenException(response.getStatusCodeValue() + response.getStatusCode().getReasonPhrase());
         }
-    }
-
-    private AccessTokenData fallbackAuthenticationResponse(String errorMessage) {
-        AccessTokenData response = new AccessTokenData();
-        TokenData tokenData = new TokenData();
-        tokenData.setIsValid(false);
-        Error error = new Error();
-        error.setMessage(errorMessage);
-        tokenData.setError(error);
-        response.setTokenData(tokenData);
-        return response;
     }
 
 }

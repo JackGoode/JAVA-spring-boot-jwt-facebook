@@ -29,7 +29,6 @@ public class Education implements Comparable<Education> {
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate graduationYear;
 
-
     @ManyToMany(targetEntity = Speciality.class, cascade = ALL)
     private Set<Speciality> specialities = new HashSet<>();
 
@@ -92,5 +91,18 @@ public class Education implements Comparable<Education> {
     @Override
     public int compareTo(Education o) {
         return this.getGraduationYear().compareTo(o.getGraduationYear());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.graduationYear.hashCode() + this.getSchool().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Education) {
+            Education educationObj = (Education) obj;
+            return this.graduationYear.equals(educationObj.getGraduationYear()) && this.getSchool().equals(educationObj.getSchool());
+        } else return false;
     }
 }

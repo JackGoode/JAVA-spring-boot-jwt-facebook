@@ -21,7 +21,7 @@ public class Concentration {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("name")
     public String getName() {
@@ -68,7 +68,7 @@ public class Concentration {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Concentration) == false) {
+        if (!(other instanceof Concentration)) {
             return false;
         }
         Concentration rhs = ((Concentration) other);

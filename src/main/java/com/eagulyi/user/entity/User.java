@@ -43,16 +43,15 @@ public class User implements Serializable {
     @Column(name = "provider")
     private DataProvider dataProvider;
 
-    // TODO: fix duplication issue/ add constraint
     @ManyToOne(cascade = ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @OneToMany(targetEntity = Education.class, fetch = FetchType.LAZY, cascade = ALL)
+    @OneToMany(targetEntity = Education.class, cascade = ALL)
     @OrderBy("graduation_year")
     private SortedSet<Education> educationItems = new TreeSet<>();
 
-    @OneToMany(targetEntity = Work.class, fetch = FetchType.LAZY, cascade = ALL)
+    @OneToMany(targetEntity = Work.class, cascade = ALL)
     @OrderBy("start_date")
     private SortedSet<Work> workItems = new TreeSet<>();
 
@@ -61,6 +60,10 @@ public class User implements Serializable {
     private List<UserRole> roles;
 
     public User() {
+    }
+
+    public User(String username) {
+        this.username = username;
     }
 
     public Long getId() {

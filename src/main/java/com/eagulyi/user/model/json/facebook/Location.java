@@ -25,7 +25,7 @@ public class Location {
     @JsonProperty("city")
     private String city;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("name")
     public String getName() {
@@ -92,7 +92,7 @@ public class Location {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Location) == false) {
+        if (!(other instanceof Location)) {
             return false;
         }
         Location rhs = ((Location) other);

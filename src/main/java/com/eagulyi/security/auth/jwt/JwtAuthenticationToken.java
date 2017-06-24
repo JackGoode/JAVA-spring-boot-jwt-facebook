@@ -1,12 +1,11 @@
 package com.eagulyi.security.auth.jwt;
 
-import java.util.Collection;
-
+import com.eagulyi.security.model.UserContext;
+import com.eagulyi.security.model.token.RawAccessJwtToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.eagulyi.security.model.UserContext;
-import com.eagulyi.security.model.token.RawAccessJwtToken;
+import java.util.Collection;
 
 /**
  * An {@link org.springframework.security.core.Authentication} implementation
@@ -58,5 +57,15 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public void eraseCredentials() {        
         super.eraseCredentials();
         this.rawAccessToken = null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

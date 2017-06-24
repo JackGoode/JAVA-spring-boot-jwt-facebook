@@ -33,7 +33,7 @@ public class Work {
     @JsonProperty("location")
     private Location location;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("employer")
     public Employer getEmployer() {
@@ -120,7 +120,7 @@ public class Work {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Work) == false) {
+        if (!(other instanceof Work)) {
             return false;
         }
         Work rhs = ((Work) other);

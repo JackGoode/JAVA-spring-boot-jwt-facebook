@@ -25,21 +25,15 @@ import java.util.Map;
 public class FacebookUserData extends JsonUserObject {
 
     @JsonProperty("education")
-    private List<Education> education = new ArrayList<Education>();
+    private List<Education> education = new ArrayList<>();
     @JsonProperty("work")
-    private List<Work> work = new ArrayList<Work>();
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
+    private List<Work> work = new ArrayList<>();
     @JsonProperty("location")
     private Location location;
     @JsonProperty("id")
     private String id;
-    @JsonProperty("email")
-    private String email;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("education")
     public List<Education> getEducation() {
@@ -61,26 +55,6 @@ public class FacebookUserData extends JsonUserObject {
         this.work = work;
     }
 
-    @JsonProperty("first_name")
-    public String getFirstName() {
-        return firstName;
-    }
-
-    @JsonProperty("first_name")
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @JsonProperty("last_name")
-    public String getLastName() {
-        return lastName;
-    }
-
-    @JsonProperty("last_name")
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     @JsonProperty("location")
     public Location getLocation() {
         return location;
@@ -99,16 +73,6 @@ public class FacebookUserData extends JsonUserObject {
     @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
-    }
-
-    @JsonProperty("email")
-    public String getEmail() {
-        return email;
-    }
-
-    @JsonProperty("email")
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override
@@ -136,7 +100,7 @@ public class FacebookUserData extends JsonUserObject {
         if (other == this) {
             return true;
         }
-        if ((other instanceof FacebookUserData) == false) {
+        if (!(other instanceof FacebookUserData)) {
             return false;
         }
         FacebookUserData rhs = ((FacebookUserData) other);

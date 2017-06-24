@@ -27,7 +27,7 @@ public class WorkList {
     @JsonProperty("endDate")
     private String endDate;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("company")
     public String getCompany() {
@@ -94,7 +94,7 @@ public class WorkList {
         if (other == this) {
             return true;
         }
-        if ((other instanceof WorkList) == false) {
+        if (!(other instanceof WorkList)) {
             return false;
         }
         WorkList rhs = ((WorkList) other);

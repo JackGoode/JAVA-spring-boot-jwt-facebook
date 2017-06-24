@@ -5,12 +5,9 @@ import com.eagulyi.security.auth.jwt.JwtAuthenticationToken;
 import com.eagulyi.security.config.WebSecurityConfig;
 import com.eagulyi.security.model.UserContext;
 import com.eagulyi.security.model.token.JwtTokenFactory;
-import com.eagulyi.user.entity.User;
 import com.eagulyi.user.model.json.facebook.FacebookUserData;
 import com.eagulyi.user.service.FacebookService;
 import com.eagulyi.user.service.UserServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.IOException;
 
 /**
  * Created by eugene on 4/14/17.
@@ -46,8 +42,6 @@ public class FacebookEndpoint {
         this.facebookService = facebookService;
     }
 
-    private static final Logger LOG = LoggerFactory.getLogger(FacebookEndpoint.class);
-
     @RequestMapping(value = "/login", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Transactional
     public void facebookLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -59,10 +53,9 @@ public class FacebookEndpoint {
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public @ResponseBody
-    FacebookUserData getUserFbData(JwtAuthenticationToken token, HttpServletResponse response) throws IOException {
+    FacebookUserData getUserFbData(JwtAuthenticationToken token, HttpServletResponse response) {
         UserContext userContext = (UserContext) token.getPrincipal();
-        User user = userService.getByUsername(userContext.getUsername()).get(); // TODO handle optional
-        return facebookService.getFbData(user.getUsername());
+        return facebookService.getFbData(userService.getByUsername(userContext.getUsername()).getUsername());
     }
 
 

@@ -71,6 +71,11 @@ public class FacebookTokenError {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
     public int hashCode() {
         return new HashCodeBuilder().append(code).append(message).append(subcode).append(additionalProperties).toHashCode();
     }

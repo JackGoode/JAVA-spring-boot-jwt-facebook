@@ -62,7 +62,7 @@ public class SignUpFormUserConverter implements UserConverter<SignUpForm> {
     }
 
     User getByUsername(SignUpForm signUpUserData) {
-        return userService.getByUsername(signUpUserData.getEmail()).get();
+        return userService.getByUsername(signUpUserData.getEmail());
     }
 
 }

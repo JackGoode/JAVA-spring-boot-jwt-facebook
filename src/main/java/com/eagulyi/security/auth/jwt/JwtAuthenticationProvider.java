@@ -1,22 +1,19 @@
 package com.eagulyi.security.auth.jwt;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.eagulyi.security.config.JwtSettings;
+import com.eagulyi.security.model.UserContext;
+import com.eagulyi.security.model.token.RawAccessJwtToken;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.eagulyi.security.config.JwtSettings;
-import com.eagulyi.security.model.UserContext;
-import com.eagulyi.security.model.token.RawAccessJwtToken;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -29,7 +26,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         RawAccessJwtToken rawAccessToken = (RawAccessJwtToken) authentication.getCredentials();
 
         Jws<Claims> jwsClaims = rawAccessToken.parseClaims(jwtSettings.getTokenSigningKey());

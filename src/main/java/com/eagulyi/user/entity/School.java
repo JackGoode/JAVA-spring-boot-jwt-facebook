@@ -12,7 +12,6 @@ public class School {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    // TODO: figure out the unique criteria
     @Column(name = "name")
     private String name;
 

@@ -22,21 +22,15 @@ import java.util.Map;
 })
 public class SignUpForm extends JsonUserObject {
 
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("email")
-    private String email;
     @JsonProperty("country")
     private String country;
     @JsonProperty("city")
     private String city;
-    private List<EducationList> educationList = new ArrayList<EducationList>();
+    private List<EducationList> educationList = new ArrayList<>();
     @JsonProperty("workList")
-    private List<WorkList> workList = new ArrayList<WorkList>();
+    private List<WorkList> workList = new ArrayList<>();
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("first_name")
     public String getFirstName() {

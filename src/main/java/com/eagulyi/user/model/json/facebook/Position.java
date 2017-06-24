@@ -21,7 +21,7 @@ public class Position {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("name")
     public String getName() {
@@ -68,7 +68,7 @@ public class Position {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Position) == false) {
+        if (!(other instanceof Position)) {
             return false;
         }
         Position rhs = ((Position) other);

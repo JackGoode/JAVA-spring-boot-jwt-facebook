@@ -9,6 +9,8 @@ import com.eagulyi.user.service.UserService;
 import com.eagulyi.user.service.util.converter.SignUpFormUserConverter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +32,8 @@ public class ProfileEndpoint {
     private final SignUpFormUserConverter signUpFormUserConverter;
     private final ServletUtil servletUtil;
 
+    private static final Logger LOG = LoggerFactory.getLogger(ProfileEndpoint.class);
+
     @Autowired
     public ProfileEndpoint(ObjectMapper objectMapper, UserService userService, SignUpFormUserConverter signUpFormUserConverter, ServletUtil servletUtil) {
         this.objectMapper = objectMapper;
@@ -42,8 +46,8 @@ public class ProfileEndpoint {
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public void getUserProfile(JwtAuthenticationToken token, HttpServletResponse response) {
         UserContext userContext = (UserContext) token.getPrincipal();
-        System.out.println("Requesting user " + userContext.getUsername() + " timestamp: " + LocalDateTime.now());
-        User user = userService.getByUsername(userContext.getUsername()).get();
+        LOG.debug("Requesting user %s timestamp %s", userContext.getUsername(), LocalDateTime.now());
+        User user = userService.getByUsername(userContext.getUsername());
 
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("username", user.getUsername());

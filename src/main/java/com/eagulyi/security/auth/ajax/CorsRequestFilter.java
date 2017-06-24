@@ -1,6 +1,8 @@
 package com.eagulyi.security.auth.ajax;
 
 import com.eagulyi.security.config.JwtSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,6 +16,7 @@ import java.io.IOException;
 
 @Component
 public class CorsRequestFilter extends OncePerRequestFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(CorsRequestFilter.class);
     private static final String ORIGIN = "Origin";
 
     private final JwtSettings jwtSettings;
@@ -43,7 +46,7 @@ public class CorsRequestFilter extends OncePerRequestFilter {
                 response.getWriter().print("OK");
                 response.getWriter().flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error(e.getMessage());
             }
         } else {
             filterChain.doFilter(request, response);

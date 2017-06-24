@@ -26,13 +26,13 @@ public class Education {
     @JsonProperty("year")
     private Year year;
     @JsonProperty("concentration")
-    private List<Concentration> concentration = new ArrayList<Concentration>();
+    private List<Concentration> concentration = new ArrayList<>();
     @JsonProperty("id")
     private String id;
     @JsonProperty("type")
     private String type;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("school")
     public School getSchool() {
@@ -109,7 +109,7 @@ public class Education {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Education) == false) {
+        if (!(other instanceof Education)) {
             return false;
         }
         Education rhs = ((Education) other);

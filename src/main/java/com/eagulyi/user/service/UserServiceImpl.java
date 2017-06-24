@@ -4,7 +4,9 @@ import com.eagulyi.security.auth.ajax.LoginRequest;
 import com.eagulyi.user.entity.DataProvider;
 import com.eagulyi.user.entity.User;
 import com.eagulyi.user.repository.UserRepository;
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +25,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User getByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) throw new UsernameNotFoundException("user " + username + " not found");
+        return userOptional.get();
+    }
+
+    @Override
+    public User getOrCreateUser(String username) {
+        return userRepository.findByUsername(username).orElseGet(() -> createDefaultUser(new User(username)));
     }
 
     @Override
     public User createDefaultUser(User user) {
+        Assert.notNull(user.getUsername(), "Username should not be empty");
         user.setDefaultRoles();
         user.setCreationDate(LocalDateTime.now());
-        System.out.println("Creating new user " + user.getUsername() + " timestamp: " + LocalDateTime.now());
-        user = userRepository.save(user);
-        System.out.println("Created new user " + user.getUsername() + " timestamp: " + LocalDateTime.now());
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
